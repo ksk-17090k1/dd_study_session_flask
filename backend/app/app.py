@@ -65,7 +65,7 @@ def show_error_handling():
 def show_user_auth():
     # クエリパラメータからユーザ名を取得
     name = request.args.get("user_name")
-    if name not in ["inagaki", "nomura"]:
+    if name not in ["satoshi", "pikachu"]:
         abort(403, "このユーザはアクセス権限がありません")
     return render_template("errors/user_auth.html", user_name=name)
 
@@ -92,4 +92,4 @@ def create_exception():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(port=8080)

@@ -94,7 +94,7 @@
     def show_user_auth():
         # クエリパラメータからユーザ名を取得
         name = request.args.get("user_name")
-        if name not in ["inagaki", "nomura"]:
+        if name not in ["satoshi", "pikachu"]:
             abort(403, "このユーザはアクセス権限がありません")
         return render_template("errors/user_auth.html", user_name=name)</code></pre>
         <p>続いて、403エラーをabortで発生させるので403エラーのハンドリングの設定をします</p>
@@ -110,22 +110,22 @@
         <p>これで準備は整ったので、ユーザー名ごとに新しく作った<code>/user-auth</code>ページに遷移してみます。</p>
     </div>
     <div>
-      <a href="/user-auth?user_name=inagaki"
-        >"/user-auth?user_name=inagaki"へ遷移</a
+      <a href="/user-auth?user_name=satoshi"
+        >"/user-auth?user_name=satoshi"へ遷移</a
       >
     </div>
     <div>
-      <a href="/user-auth?user_name=nomura"
-        >"/user-auth?user_name=nomura"へ遷移</a
+      <a href="/user-auth?user_name=pikachu"
+        >"/user-auth?user_name=pikachu"へ遷移</a
       >
     </div>
     <div>
-      <a href="/user-auth?user_name=dangerous_user"
-        >"/user-auth?user_name=dangerous_user"へ遷移</a
+      <a href="/user-auth?user_name=dangerous_pokemon"
+        >"/user-auth?user_name=dangerous_pokemon"へ遷移</a
       >
     </div>
     <div>
-        <p>上記を試してみると、ユーザー名が<code>dangerous_user</code>の場合のみ設定通り403エラーが発生することが分かりました！</p>
+        <p>上記を試してみると、ユーザー名が<code>dangerous_pokemon</code>の場合のみ設定通り403エラーが発生することが分かりました！</p>
     </div>
   </div>
 </main>

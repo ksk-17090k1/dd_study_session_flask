@@ -1,0 +1,93 @@
+strong {
+  font-weight: bold;
+  background: linear-gradient(transparent 70%, #fff799 70%);
+}
+
+/* コードブロック */
+pre {
+  margin: 1em 0;
+  padding: 1em;
+  border-radius: 5px;
+  background: #25292f;
+  color: #fff;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+code {
+  background: #25292f;
+  color: #fff;
+  padding: 0.2em;
+}
+
+.box {
+  --border-thin: 0px;
+  --padding: var(--s1);
+
+  padding: var(--padding);
+  color: var(--color-dark);
+  background-color: var(--color-light);
+
+  border: var(--border-thin) solid gray;
+  outline: var(--border-thin) transparent;
+  outline-offset: calc(var(--border-thin) * -1);
+
+  --color-light: #fff;
+  --color-dark: #000;
+}
+
+.container {
+  min-width: 40em;
+}
+
+.box * {
+  color: inherit;
+}
+
+.stack {
+  /* modular scale */
+  --stack-ratio: 1.5;
+  --stack-s-5: calc(var(--stack-s-4) / var(--stack-ratio));
+  --stack-s-4: calc(var(--stack-s-3) / var(--stack-ratio));
+  --stack-s-3: calc(var(--stack-s-2) / var(--stack-ratio));
+  --stack-s-2: calc(var(--stack-s-1) / var(--stack-ratio));
+  --stack-s-1: calc(var(--stack-s0) / var(--stack-ratio));
+  --stack-s0: 1.5rem;
+  --stack-s1: calc(var(--stack-s0) * var(--stack-ratio));
+  --stack-s2: calc(var(--stack-s1) * var(--stack-ratio));
+  --stack-s3: calc(var(--stack-s2) * var(--stack-ratio));
+  --stack-s4: calc(var(--stack-s3) * var(--stack-ratio));
+  --stack-s5: calc(var(--stack-s4) * var(--stack-ratio));
+
+  /* autoを使えるようにするためFlexboxをつかう */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  & > * {
+    /* 既存の垂直マージンを削除 */
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  /* owl selector */
+  & > * + * {
+    margin-top: var(--space, var(--stack-s0));
+  }
+}
+
+/* 中央よせにする */
+.center {
+  box-sizing: content-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  max-width: 50em;
+
+  padding-right: var(--s1);
+  padding-left: var(--s1);
+
+  margin-right: auto;
+  margin-left: auto;
+}

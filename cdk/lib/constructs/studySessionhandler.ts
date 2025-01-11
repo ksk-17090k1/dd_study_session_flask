@@ -27,7 +27,7 @@ export class StudySessionFunction extends Construct {
 
     const handler = new DockerImageFunction(this, "Handler", {
       code: DockerImageCode.fromImageAsset(
-        path.join(__dirname, "../../../src/lambda/python"),
+        path.join(__dirname, "../../../backend"),
         {
           platform: Platform.LINUX_AMD64,
           file: "Dockerfile",
