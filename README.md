@@ -8,8 +8,8 @@
 
 ```sh
 cd backend
-docker image build ./ -t flask-app
-docker container run -p 8080:8080 -it --rm --name flask-app flask-app
+poetry install
+poetry run python app/app.py
 ```
 
 ## infrastructure
