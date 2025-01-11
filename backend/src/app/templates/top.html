@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+<!--  -->
+{% block title %}TOP{% endblock %}
+<!--  -->
+{% block header %}
+<h1>トップ: 4章 フィルタとエラーハンドリング</h1>
+<hr />
+{% endblock %}
+<!--  -->
+{% block content %}
+<main class="center">
+  <div class="container">
+    <img
+      src="{{ url_for('static', filename='images/top/hero.png')}}"
+      alt=""
+      width="600"
+    />
+    <h2>セクション</h2>
+    <ul class="stack">
+      <li>
+        <a href="{{ url_for('show_filter_block')}}">文全体へのフィルタ</a>
+      </li>
+      <li>
+        <a href="{{ url_for('show_filter_list')}}">単一の変数へのフィルタ</a>
+      </li>
+      <li><a href="{{ url_for('show_custom_filter')}}">カスタムフィルタ</a></li>
+      <li>
+        <a href="{{ url_for('show_error_handling')}}">エラーハンドリング</a>
+      </li>
+    </ul>
+  </div>
+</main>
+{% endblock %}
+<!--  -->
+{% block footer %}{% endblock %}

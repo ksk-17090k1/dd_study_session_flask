@@ -1,0 +1,67 @@
+{% extends "filter/base_filter.html" %}
+<!--  -->
+{% block header %}
+<h1>フィルター：文全体</h1>
+{% endblock %}
+<!--  -->
+{% block content %}
+<main class="center">
+  <div class="stack container">
+    <div>
+      <h2>【前提】</h2>
+      <p>
+        こんな感じで<code>app.py</code>の中で変数<code>show_word</code>をjinjaテンプレートに渡しているとします。
+      </p>
+      <pre><code>@app.route("/filter")
+            def show_filter_block():
+                word = "pen"
+                return render_template("filter/block.html", show_word=word)</code></pre>
+    </div>
+
+    <div>
+      <h2>【フィルター無し】</h2>
+
+      <p>まずは通常のjinjaテンプレート内での変数の参照についての復習です。</p>
+
+      <h3>jinja側での記述</h3>
+      <pre><code>{% raw %}this is a {{ show_word }}.{% endraw %}</code></pre>
+      <h3>レンダリング後</h3>
+      <div class="box" style="--border-thin: 1px">
+        <p>this is a {{ show_word }}.</p>
+      </div>
+
+      <p>
+        このように、<code>{% raw %}{{ show_word }}{% endraw %}</code
+        >の部分に可変値が入って終わりです。
+      </p>
+    </div>
+
+    <div>
+      <h2>【フィルター有り】</h2>
+      <p>HTML上の文章全体にフィルタを適用するjinjaの文法はこんな感じです</p>
+      <pre><code>{% raw %}{% filter <フィルタの関数名> %} <任意の文章> {% endfilter %}{% endraw %}</code></pre>
+      <p>
+        ここでは例として、大文字に変換するフィルタ<code>upper</code>を適用してみます。
+      </p>
+
+      <h3>jinja側での記述</h3>
+      <pre><code>{% raw %}{% filter upper %} this is a {{ show_word }}. {% endfilter %}{% endraw %}</code></pre>
+
+      <h3>レンダリング後</h3>
+      <div class="box" style="--border-thin: 1px">
+        <p>{% filter upper %} this is a {{ show_word }}. {% endfilter %}</p>
+      </div>
+      <p>
+        このように、<code
+          >{% raw %}{% filter upper %} ... {% endfilter %}{% endraw %}</code
+        >で囲まれた箇所が大文字に変換されていることがわかります。
+      </p>
+    </div>
+    <p>
+      ただ、このような文全体に適用するフィルタは頻度高く使いそうなのは文字列を大文字/小文字にするくらいしかなく、<strong>後述する変数に対してのフィルタのほうが実際は多用することになりそう</strong>です。
+    </p>
+  </div>
+</main>
+{% endblock %}
+<!--  -->
+{% block footer %} {{ super() }} {% endblock %}

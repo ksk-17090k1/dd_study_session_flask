@@ -1,0 +1,87 @@
+{% extends "filter/base_filter.html" %}
+<!--  -->
+{% block header %}
+<h1>単一の変数へのフィルタ</h1>
+{% endblock %}
+<!--  -->
+{% block content %}
+<main class="center">
+  <div class="stack container">
+    <div>
+      <h2>フィルタの適用</h2>
+      <p>jinjaにおける変数へのフィルタは以下のように記述します。</p>
+      <p>(パイプ演算子<code>|</code>を使うのがポイントです)</p>
+
+      <pre><code>{% raw %}{{ <変数名> | <フィルタの関数名> }}{% endraw %}</code></pre>
+
+      <p>以降、本で紹介されているフィルタ関数を紹介します。</p>
+    </div>
+    <div>
+      <p>
+        まず始めに、前準備としてこんな感じで<code>app.py</code>の中で変数(配列)<code>hero_names</code>をjinjaテンプレートに渡しておきます。
+      </p>
+      <pre><code>@app.route("/filter-list")
+        def show_filter_list():
+            hero_names = ["桃太郎", "金太郎", "浦島タロウ", "かぐや姫", "笠地蔵"]
+            return render_template("filter/list.html", hero_names=hero_names)</code></pre>
+    </div>
+    <div class="box">
+      <h3>first関数</h3>
+      <p>配列の最初の要素が返されます</p>
+      <p>jinja側での記述</p>
+      <pre><code>{% raw %}【最初のユーザー】 {{ hero_names | first }}{% endraw %}</code></pre>
+      <p>レンダリング後</p>
+      <div class="box" style="--border-thin: 1px">
+        <p>【最初のユーザー】 {{ hero_names | first }}</p>
+      </div>
+    </div>
+
+    <div class="box">
+      <h3>last関数</h3>
+      <p>配列の最後の要素が返されます</p>
+      <p>jinja側での記述</p>
+      <pre><code>{% raw %}【最後のユーザー】 {{ hero_names | last }}{% endraw %}</code></pre>
+      <p>レンダリング後</p>
+      <div class="box" style="--border-thin: 1px">
+        <p>【最後のユーザー】 {{ hero_names | last }}</p>
+      </div>
+    </div>
+
+    <div class="box">
+      <h3>join関数</h3>
+      <p>配列の要素を指定した文字列で結合します</p>
+      <p>jinja側での記述</p>
+      <pre><code>{% raw %}【１つにまとめる】 {{ hero_names | join('---') }}{% endraw %}</code></pre>
+      <p>レンダリング後</p>
+      <div class="box" style="--border-thin: 1px">
+        <p>【１つにまとめる】 {{ hero_names | join('---') }}</p>
+      </div>
+    </div>
+
+    <div class="box">
+      <h3>length関数</h3>
+      <p>配列の要素数を返します</p>
+      <p>jinja側での記述</p>
+      <pre><code>{% raw %}【ユーザー数】 {{ hero_names | length }}{% endraw %}</code></pre>
+      <p>レンダリング後</p>
+      <div class="box" style="--border-thin: 1px">
+        <p>【ユーザー数】 {{ hero_names | length }}</p>
+      </div>
+    </div>
+
+    <div class="box">
+      <h3>random関数</h3>
+      <p>配列の要素をランダムに返します</p>
+      <p>jinja側での記述</p>
+      <pre><code>{% raw %}【ランダム】 {{ hero_names | random }}{% endraw %}</code></pre>
+      <p>レンダリング後</p>
+      <div class="box" style="--border-thin: 1px">
+        <p>【ランダム】 {{ hero_names | random }}</p>
+      </div>
+    </div>
+    <p>(感想)lengthが一番使うこと多そう。逆にrandomいつ使うんや...</p>
+  </div>
+</main>
+{% endblock %}
+<!--  -->
+{% block footer %} {{ super() }} {% endblock %}

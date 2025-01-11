@@ -1,0 +1,134 @@
+{% extends "filter/base_filter.html" %}
+<!--  -->
+{% block header %}
+<h1>エラーハンドリング</h1>
+{% endblock %}
+<!--  -->
+{% block content %}
+<main class="center">
+  <div class="stack container">
+    <div>
+      <h2>HTTPステータスコードの復習</h2>
+      <p>
+        HTTPリクエストを送った際に、レスポンスとして返ってくる情報の１つにステータスコードがあります。
+      </p>
+      <img
+        src="{{ url_for('static', filename='images/top/status_code.png')}}"
+        alt=""
+        width="700"
+      />
+      <p>有名なものとしては以下があります。</p>
+      <ul>
+        <li>404: Not Found</li>
+        <ul>
+          <li>ページが見つからなかった場合に返されます</li>
+        </ul>
+        <li>200: OK</li>
+        <ul>
+          <li>ページが見つかった場合に返されます</li>
+        </ul>
+        <li>500: Internal Server Error</li>
+        <ul>
+          <li>サーバ側で何かしらのエラーが起きたときに返されます</li>
+        </ul>
+        <li>301: Moved Permanently</li>
+        <ul>
+          <li>リダイレクトのときに返されます</li>
+        </ul>
+      </ul>
+    </div>
+    <div>
+      <h2 id="error_handling_section">エラーハンドリングの実装</h2>
+      <p>
+        例として、404エラーが発生したときにそのエラーを検知し、独自で用意しておいたページを表示させることを考えます。
+      </p>
+      <p>これを行うには、<code>app.py</code>に以下のように記述すればOKです</p>
+      <p>
+        <code>@app.errorhandler()</code
+        >デコレータを使うのがポイントで、デコレータの引数の中にハンドリングしたいエラーの内容を入れる感じになります。
+      </p>
+      <pre><code>@app.errorhandler(NotFound)
+    def show_404_page(error):
+        msg = error.description
+        print("エラー内容：", msg)
+        return render_template("errors/404.html"), 404</code></pre>
+    </div>
+    <div>
+      <p>
+        実装したエラーハンドリングを試すには↓のリンクをクリックしてみてください
+      </p>
+      <a href="/not-exist-page">存在しないページに遷移</a>
+    </div>
+    <div>
+      上記を試してみると、独自に作成した404ページが表示されることが分かります。
+    </div>
+    <div>
+      <h2>abort処理</h2>
+      <p>
+        ステータスコードの特定のエラーを強制的に発生させることをabort処理と言います。
+      </p>
+      <p>(pythonの<code>raise</code>的なものです)</p>
+      <p>
+        例えば、以下のようなパスを定義すると強制的に404エラーが発生し、404ページに遷移します。
+      </p>
+      <pre><code>@app.route("/abort")
+    def create_exception():
+        abort(404, "要求されたページやファイルが見つからない")</code></pre>
+    </div>
+    <div>
+      <p>実際に遷移してみる場合はこちら↓</p>
+      <a href="/abort">"/abort"に遷移</a>
+    </div>
+    <div>
+      <p>
+        ただ、正直この本に乗っている404のabortだと有り難みがよく分からないと思うので、例としてユーザー認証的な処理を実装してみます。
+      </p>
+      <p>※ 実際のユーザー認証は既存の認証フレームワークを使うかと思うので、あくまでabort処理の理解のための例です。</p>
+      </p>
+    </div>
+    <div>
+      <h2 id="user_auth_section">abortを使ったユーザ認証的なもの</h2>
+      <p>まずは<code>app.py</code>側に特定のユーザー以外は403エラー(認証エラー)を起こす<code>/user-auth</code>ページをつくります</p>
+      <p>簡単のため、ユーザー名はクエリパラメータから取得する形にしました。</p>
+      <pre><code>@app.route("/user-auth")
+    def show_user_auth():
+        # クエリパラメータからユーザ名を取得
+        name = request.args.get("user_name")
+        if name not in ["inagaki", "nomura"]:
+            abort(403, "このユーザはアクセス権限がありません")
+        return render_template("errors/user_auth.html", user_name=name)</code></pre>
+        <p>続いて、403エラーをabortで発生させるので403エラーのハンドリングの設定をします</p>
+        <pre><code>@app.errorhandler(Forbidden)
+    def show_403_page(error):
+        msg = error.description
+        print("エラー内容：", msg)
+        return render_template("errors/403.html"), 403</code></pre>
+        <p>ハンドリングの内容としては、404と同じように403ページを表示させるようにしました。</p>
+        <p>(403ページは404ページと同様にhtmlファイルで用意してます)</p>
+    </div>
+    <div>
+        <p>これで準備は整ったので、ユーザー名ごとに新しく作った<code>/user-auth</code>ページに遷移してみます。</p>
+    </div>
+    <div>
+      <a href="/user-auth?user_name=inagaki"
+        >"/user-auth?user_name=inagaki"へ遷移</a
+      >
+    </div>
+    <div>
+      <a href="/user-auth?user_name=nomura"
+        >"/user-auth?user_name=nomura"へ遷移</a
+      >
+    </div>
+    <div>
+      <a href="/user-auth?user_name=dangerous_user"
+        >"/user-auth?user_name=dangerous_user"へ遷移</a
+      >
+    </div>
+    <div>
+        <p>上記を試してみると、ユーザー名が<code>dangerous_user</code>の場合のみ設定通り403エラーが発生することが分かりました！</p>
+    </div>
+  </div>
+</main>
+{% endblock %}
+<!--  -->
+{% block footer %} {{ super() }} {% endblock %}

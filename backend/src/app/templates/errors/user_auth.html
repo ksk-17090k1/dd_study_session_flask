@@ -1,0 +1,20 @@
+{% extends "filter/base_filter.html" %}
+<!--  -->
+{% block header %}
+<h1>ユーザー認証ページ</h1>
+{% endblock %}
+<!--  -->
+{% block content %}
+<main class="center">
+  <div class="stack container">
+    <p>使用しているユーザー名: {{ user_name }}</p>
+    <hr />
+    <p>ユーザー{{ user_name }}は正常なユーザーです！</p>
+    <p>無事ページ遷移が成功しました！！</p>
+  </div>
+</main>
+{% endblock %}
+<!--  -->
+{% block footer %}
+<a href="/error-handling#user_auth_section">エラーハンドリングのページへ戻る</a>
+{% endblock %}

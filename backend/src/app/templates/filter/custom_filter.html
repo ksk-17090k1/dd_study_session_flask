@@ -1,0 +1,101 @@
+{% extends "filter/base_filter.html" %}
+<!--  -->
+{% block header %}
+<h1>カスタムフィルタ</h1>
+{% endblock %}
+<!--  -->
+{% block content %}
+<main class="center">
+  <div class="stack container">
+    <div>
+      <h2>カスタムフィルタの定義</h2>
+
+      <p>
+        <code>app.py</code
+        >の中で<code>@app.template_filter()</code>デコレータを使うことで、カスタムフィルタが定義できます
+      </p>
+      <p>
+        以下では<code>truncate</code>という名前のカスタムフィルタを作成しています。
+      </p>
+      <p>
+        関数の第一引数はjinjaから渡される変数が入り、第二引数以降は任意の引数、という仕組みになっています。
+      </p>
+
+      <pre><code>@app.template_filter("truncate")
+    def str_truncate(value: str, length: int = 10) -> str:
+        """文字列を指定した長さで切り詰めるカスタムフィルタ"""
+        if len(value) > length:
+            return value[:length] + "..."
+        return value</code></pre>
+    </div>
+    <div>
+      <h2>カスタムフィルタの適用</h2>
+      <p>まず<code>app.py</code>側で以下のように書きます</p>
+      <pre><code>@app.route("/filter-custom")
+    def show_custom_filter():
+        long_word = "じゅげむじゅげむごこうのすりきれ"
+        return render_template(
+            "filter/custom_filter.html", long_word=long_word
+        )</code></pre>
+      <h3>jinja側での記述</h3>
+      <pre><code>{% raw %}【カスタムフィルタ】 {{ long_word | truncate }}{% endraw %}</code></pre>
+      <h3>レンダリング後</h3>
+      <div class="box" style="--border-thin: 1px">
+        <p>【カスタムフィルタ】 {{ long_word | truncate }}</p>
+      </div>
+      <p>ちゃんと10文字以降文字詰めがされているのが分かります！</p>
+    </div>
+    <div>
+      <h2>せっかくなのでもう１つカスタムフィルタ作ってみた</h2>
+      <p>
+        ポケモンの名前からタイプを返すカスタムフィルタ<code>pokemon_type</code>を作ります。(<s>いつつかうんそれ...</s>)
+      </p>
+      <pre><code>@app.template_filter("pokemon_type")
+    def check_pokemon_type(pokemon_name: str) -> str:
+        """ポケモンのタイプを返すカスタムフィルタ"""
+        if pokemon_name == "ヒトカゲ":
+            return "ほのお"
+        elif pokemon_name == "フシギダネ":
+            return "くさ"
+        elif pokemon_name == "ゼニガメ":
+            return "みず"
+        raise NotImplementedError(f"未対応のポケモン名です：{pokemon_name}")</code></pre>
+      <p>続いて<code>app.py</code>側では以下のようにします。</p>
+      <pre><code>@app.route("/filter-custom")
+    def show_custom_filter():
+        pokemons = ["ヒトカゲ", "フシギダネ", "ゼニガメ"]
+        return render_template(
+            "filter/custom_filter.html", pokemons=pokemons
+        )</code></pre>
+
+      <p>それではカスタムフィルタ<code>pokemon_type</code>を使ってみる</p>
+
+      <h3>jinja側での記述</h3>
+      <pre><code>{% raw %}{% for pokemon in pokemons %}
+    {{ pokemon }}のタイプは「{{ pokemon | pokemon_type }}」です！
+{% endfor %}{% endraw %}</code></pre>
+      <h3>レンダリング後</h3>
+      <div class="box" style="--border-thin: 1px">
+        {% for pokemon in pokemons %}
+        <p>{{ pokemon }}のタイプは「{{ pokemon | pokemon_type }}」です！</p>
+        {% endfor %}
+      </div>
+      <p>ちゃんと動作していることが分かります！</p>
+    </div>
+    <div>
+      <h3>カスタムフィルタは楽しいかも。でも...</h3>
+      <p>
+        個人的には上記の<code>pokemon_type</code>のようなビジネスロジックが含まれるカスタムフィルタは作らないほうがよいかと思います。
+      </p>
+      <p>
+        これは、コードを初めてみた人がポケモンのタイプを返す処理がどこで行われているのか分かりにくくなったり、カスタムフィルタ側と普通のpythonファイル側で同じ処理が重複して実装されてしまう恐れがあるためです。
+      </p>
+      <p>
+        なので、<strong>カスタムフィルタは「めちゃめちゃ汎用的な処理だけどなぜかflaskが用意してくれてない」というケースにのみ使うのが良い</strong>かと感じました。
+      </p>
+    </div>
+  </div>
+</main>
+{% endblock %}
+<!--  -->
+{% block footer %} {{ super() }} {% endblock %}

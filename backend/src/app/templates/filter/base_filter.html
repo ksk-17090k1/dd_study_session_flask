@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>FILTER</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='base.css') }}"
+    />
+    <!-- hightllight.jsを読み込み -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/dracula.min.css"
+    />
+  </head>
+  <body>
+    {% block header %}ヘッダー{% endblock %}
+    <hr />
+    {% block content %}内容{% endblock %}
+    <!--  -->
+
+    {% block footer %}
+    <br />
+    <br />
+    <hr />
+    <a href="{{ url_for('index')}}">TOP画面へ</a>
+    {% endblock %}
+    <!-- hightllight.jsを使ってシンタックスハイライトを付与 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+  </body>
+</html>
